@@ -7,13 +7,13 @@ import java.util.function.IntPredicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 
-public class HelloWorld {
+public class MyProcedures {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        HelloWorld.tryPredicate();
-        HelloWorld.tryConsumer();
-        HelloWorld.tryFunction();
+        MyProcedures.tryPredicate();
+        MyProcedures.tryConsumer();
+        MyProcedures.tryFunction();
     }
 
     public static void printTestResult(String description, Boolean condition){
@@ -30,7 +30,7 @@ public class HelloWorld {
         IntPredicate isOdd = x -> (x & 1) == 1;
         int[] oddInts = IntStream.rangeClosed(0, 10).filter(isOdd).toArray();
 
-        HelloWorld.printTestResult("filtering array for odd values",
+        MyProcedures.printTestResult("filtering array for odd values",
                 Arrays.equals(oddInts, new int[]{1, 3, 5, 7, 9})
         );
     }
@@ -45,7 +45,7 @@ public class HelloWorld {
                 entry -> housemates.put(entry.getKey(), true);
         housemates.entrySet().parallelStream().forEach(setToTrue);
 
-        HelloWorld.printTestResult("set all entries to true",
+        MyProcedures.printTestResult("set all entries to true",
                 housemates.values().parallelStream().allMatch(Boolean::valueOf)
         );
     }
@@ -58,7 +58,7 @@ public class HelloWorld {
         int[] housemateLengths = housemates.parallelStream().mapToInt(toLen)
                 .toArray();
 
-        HelloWorld.printTestResult(
+        MyProcedures.printTestResult(
                 "map names of housemates to length of names",
                 Arrays.equals(housemateLengths, new int[]{4, 4, 5, 6})
         );

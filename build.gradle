@@ -17,5 +17,5 @@ dependencies {
 }
 
 application {
-    mainClassName = 'HelloWorld'
+    mainClassName = 'MyProcedures'
 }

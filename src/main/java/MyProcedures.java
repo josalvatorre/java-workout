@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,7 @@ public class MyProcedures {
         MyProcedures.tryConsumer();
         MyProcedures.tryFunction();
         MyProcedures.tryMethodReference();
+        MyProcedures.tryComposingComparator();
     }
 
     public static void printTestResult(String description, Boolean condition){
@@ -44,6 +46,7 @@ public class MyProcedures {
                 "Ahmed", false, "Ashish", false
         ));
 
+        // A consumer which sets all entries in the hash-map to true.
         Consumer<Map.Entry<String, Boolean>> setToTrue =
                 entry -> housemates.put(entry.getKey(), true);
 
@@ -59,6 +62,7 @@ public class MyProcedures {
         // We could've directly passed this Function, but let's note the type.
         Function<Integer, String> myIntToString = Object::toString;
 
+        // A List of ints parsed into strings.
         List<String> parsedInts = Stream.of(1, 2, 3)
                 .map(myIntToString)
                 .collect(Collectors.toList());
@@ -72,6 +76,7 @@ public class MyProcedures {
         // We could've directly passed this Function, but let's note the type.
         ToIntFunction<String> toLen = String::length;
 
+        // An array of the lengths of the housemates' names.
         int[] housemateLengths = Stream.of("Jose", "Tran", "Ahmed", "Ashish")
                 .mapToInt(toLen)
                 .toArray();
@@ -119,11 +124,38 @@ public class MyProcedures {
 
         MyProcedures.printTestResult(
                 "Using a bound method reference, "
-                        +"count the numer of instances in a list",
+                        +"count the number of instances in a list",
                 2 == new MyInt(0).countInstances(
                         Stream.of(0, 1, 0, 2).map(MyInt::new)
                                 .collect(Collectors.toList())
                 )
+        );
+    }
+
+    public static void tryComposingComparator(){
+        int[][] coordinates = new int[][]{
+                {0, 0}, {1, 0}, {0, 1}
+        };
+
+        // Sort arrays in descending order:
+        // by highest y-value, then by lowest x-value.
+        Arrays.sort(
+                coordinates,
+                Comparator
+                        // sort descending by y-value
+                        .comparing((int[] xy) -> xy[1])
+                        // then descending by lower x-value
+                        .thenComparing((int[] xy) -> -xy[0])
+                        // Note: Java sorts in ascending order, so reverse into
+                        // descending order.
+                        .reversed()
+        );
+
+        MyProcedures.printTestResult(
+                "Using Comparator composing, sort a list of coordinates"
+                        +" by y-value, then by lower x-value.",
+                Arrays.deepEquals(coordinates,
+                        new int[][]{{0, 1}, {0, 0}, {1, 0}})
         );
     }
 }

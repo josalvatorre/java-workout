@@ -16,6 +16,7 @@ public class MyProcedures {
         MyProcedures.tryMethodReference();
         MyProcedures.tryComposingComparator();
         MyProcedures.tryComposingPredicate();
+        MyProcedures.tryComposingFunction();
     }
 
     public static void printTestResult(
@@ -179,5 +180,21 @@ public class MyProcedures {
                 "filter for positive ints",
                 Arrays.equals(posMultiplesOf3LessThan10, new int[]{3, 6, 9})
         );
+    }
+
+    public static void tryComposingFunction(){
+        int[] nameLengthSquaredNeg = Stream.of(
+                "Jose", "Haris", "Esteban", "Sajad"
+        ).mapToInt(String::length).map(
+                ((IntUnaryOperator) x -> x*x).andThen(x -> -x)
+        ).toArray();
+
+        MyProcedures.printTestResult(
+                "Function Composing",
+                "map a list of Strings to the negative square of their lengths",
+                Arrays.equals(nameLengthSquaredNeg,
+                        new int[]{-16, -25, -49, -25})
+        );
+
     }
 }

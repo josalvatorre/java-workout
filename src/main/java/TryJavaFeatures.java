@@ -18,6 +18,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryComposingPredicate();
         TryJavaFeatures.tryComposingFunction();
         TryJavaFeatures.tryDistinct();
+        TryJavaFeatures.tryTakeWhile();
     }
 
     public static void printTestResult(
@@ -208,6 +209,19 @@ public class TryJavaFeatures {
                 "Stream::distinct",
                 "get the unique strings in a stream",
                 uniqueNames.equals(List.of("jose", "tran"))
+        );
+    }
+
+    public static void tryTakeWhile(){
+        int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
+
+        int[] negInts = Arrays.stream(sortedInts).takeWhile(x -> x < 0)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::takeWhile",
+                "Efficiently filter for negative ints in a sorted array.",
+                Arrays.equals(negInts, new int[]{-3, -2, -1})
         );
     }
 }

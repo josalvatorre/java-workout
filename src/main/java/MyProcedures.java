@@ -20,7 +20,7 @@ public class MyProcedures {
     }
 
     public static void printTestResult(
-            String javaFeatureName,  String taskDescription, Boolean condition
+            String javaFeatureName,  String taskDescription, boolean condition
     ){
         System.out.println(String.format(
                 "%s: Using feature \"%s\", do \"%s\"",
@@ -195,6 +195,5 @@ public class MyProcedures {
                 Arrays.equals(nameLengthSquaredNeg,
                         new int[]{-16, -25, -49, -25})
         );
-
     }
 }

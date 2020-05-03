@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class MyProcedures {
+public class TryJavaFeatures {
     public static void main(String[] args) {
-        MyProcedures.tryPredicate();
-        MyProcedures.tryConsumer();
-        MyProcedures.tryFunction();
-        MyProcedures.tryMethodReference();
-        MyProcedures.tryComposingComparator();
-        MyProcedures.tryComposingPredicate();
-        MyProcedures.tryComposingFunction();
+        TryJavaFeatures.tryPredicate();
+        TryJavaFeatures.tryConsumer();
+        TryJavaFeatures.tryFunction();
+        TryJavaFeatures.tryMethodReference();
+        TryJavaFeatures.tryComposingComparator();
+        TryJavaFeatures.tryComposingPredicate();
+        TryJavaFeatures.tryComposingFunction();
     }
 
     public static void printTestResult(
@@ -36,7 +36,7 @@ public class MyProcedures {
         IntPredicate isOdd = x -> (x & 1) == 1;
         int[] oddInts = IntStream.rangeClosed(1, 10).filter(isOdd).toArray();
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Predicate",
                 "filter array for odd values",
                 Arrays.equals(oddInts, new int[]{1, 3, 5, 7, 9})
@@ -55,7 +55,7 @@ public class MyProcedures {
 
         housemates.entrySet().parallelStream().forEach(setToTrue);
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Consumer",
                 "set all entries to true",
                 housemates.values().parallelStream().allMatch(Boolean::valueOf)
@@ -71,7 +71,7 @@ public class MyProcedures {
                 .map(myIntToString)
                 .collect(Collectors.toList());
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Function",
                 "convert Integers to Strings",
                 parsedInts.equals(List.of("1", "2", "3"))
@@ -86,7 +86,7 @@ public class MyProcedures {
                 .mapToInt(toLen)
                 .toArray();
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Function",
                 "map names of housemates to length of names",
                 Arrays.equals(housemateLengths, new int[]{4, 4, 5, 6})
@@ -98,7 +98,7 @@ public class MyProcedures {
                 .mapToInt(Integer::parseInt)
                 .toArray();
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Static Method Reference",
                 "convert Strings to ints",
                 Arrays.equals(parsedInts, new int[]{1, 2, 3})
@@ -108,7 +108,7 @@ public class MyProcedures {
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Instance Method Reference",
                 "convert ints to Strings",
                 intStrings.equals(List.of("1", "2", "3"))
@@ -130,7 +130,7 @@ public class MyProcedures {
             }
         }
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Bound Method Reference",
                 "count the number of instances in a list",
                 2 == new MyInt(0).countInstances(
@@ -159,7 +159,7 @@ public class MyProcedures {
                         .reversed()
         );
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Comparator Composing",
                 "sort a list of coordinates by y-value"
                         +", then by lower x-value",
@@ -175,7 +175,7 @@ public class MyProcedures {
                         .and(x -> x < 10)
         ).toArray();
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Predicate Composing",
                 "filter for positive ints",
                 Arrays.equals(posMultiplesOf3LessThan10, new int[]{3, 6, 9})
@@ -189,7 +189,7 @@ public class MyProcedures {
                 ((IntUnaryOperator) x -> x*x).andThen(x -> -x)
         ).toArray();
 
-        MyProcedures.printTestResult(
+        TryJavaFeatures.printTestResult(
                 "Function Composing",
                 "map a list of Strings to the negative square of their lengths",
                 Arrays.equals(nameLengthSquaredNeg,

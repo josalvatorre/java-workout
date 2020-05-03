@@ -20,6 +20,8 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryDistinct();
         TryJavaFeatures.tryTakeWhile();
         TryJavaFeatures.tryDropWhile();
+        TryJavaFeatures.tryLimit();
+        TryJavaFeatures.trySkip();
     }
 
     public static void printTestResult(
@@ -221,7 +223,7 @@ public class TryJavaFeatures {
 
         TryJavaFeatures.printTestResult(
                 "Stream::takeWhile",
-                "Efficiently filter for negative ints in an ascending array",
+                "Efficiently select for negative ints in an ascending array",
                 Arrays.equals(negInts, new int[]{-3, -2, -1})
         );
     }
@@ -234,8 +236,34 @@ public class TryJavaFeatures {
 
         TryJavaFeatures.printTestResult(
                 "Stream::dropWhile",
-                "Efficiently filter for positive ints in a descending array",
+                "Efficiently select for positive ints in a descending array",
                 Arrays.equals(posInts, new int[]{1, 2, 3})
+        );
+    }
+
+    public static void tryLimit(){
+        int[] firstPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
+                .filter(x -> (x % 2) == 0)
+                .limit(3)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::limit",
+                "Get the first 3 multiples of 2 in a huge stream",
+                Arrays.equals(firstPosMultiplesOf2, new int[]{2, 4, 6})
+        );
+    }
+
+    public static void trySkip(){
+        int[] lastPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
+                .filter((int x) -> (x & 1) == 0)
+                .skip(1000/2 - 3)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::skip",
+                "Get the last multiples of two in a huge stream",
+                Arrays.equals(lastPosMultiplesOf2, new int[]{996, 998, 1000})
         );
     }
 }

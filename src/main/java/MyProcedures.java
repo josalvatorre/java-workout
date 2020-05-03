@@ -3,10 +3,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.ToIntFunction;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -18,13 +15,17 @@ public class MyProcedures {
         MyProcedures.tryFunction();
         MyProcedures.tryMethodReference();
         MyProcedures.tryComposingComparator();
+        MyProcedures.tryComposingPredicate();
     }
 
-    public static void printTestResult(String description, Boolean condition){
+    public static void printTestResult(
+            String javaFeatureName,  String taskDescription, Boolean condition
+    ){
         System.out.println(String.format(
-                "%s: %s",
+                "%s: Using feature \"%s\", do \"%s\"",
                 condition ? "PASS" : "FAIL",
-                description
+                javaFeatureName,
+                taskDescription
         ));
     }
 
@@ -35,7 +36,8 @@ public class MyProcedures {
         int[] oddInts = IntStream.rangeClosed(1, 10).filter(isOdd).toArray();
 
         MyProcedures.printTestResult(
-                "Using Predicate, filter array for odd values",
+                "Predicate",
+                "filter array for odd values",
                 Arrays.equals(oddInts, new int[]{1, 3, 5, 7, 9})
         );
     }
@@ -53,7 +55,8 @@ public class MyProcedures {
         housemates.entrySet().parallelStream().forEach(setToTrue);
 
         MyProcedures.printTestResult(
-                "Using Consumer, set all entries to true",
+                "Consumer",
+                "set all entries to true",
                 housemates.values().parallelStream().allMatch(Boolean::valueOf)
         );
     }
@@ -68,7 +71,8 @@ public class MyProcedures {
                 .collect(Collectors.toList());
 
         MyProcedures.printTestResult(
-                "Using Function, convert Integers to Strings",
+                "Function",
+                "convert Integers to Strings",
                 parsedInts.equals(List.of("1", "2", "3"))
         );
 
@@ -82,7 +86,8 @@ public class MyProcedures {
                 .toArray();
 
         MyProcedures.printTestResult(
-                "Using Function, map names of housemates to length of names",
+                "Function",
+                "map names of housemates to length of names",
                 Arrays.equals(housemateLengths, new int[]{4, 4, 5, 6})
         );
     }
@@ -93,7 +98,8 @@ public class MyProcedures {
                 .toArray();
 
         MyProcedures.printTestResult(
-                "Using a static method reference, convert Strings to ints",
+                "Static Method Reference",
+                "convert Strings to ints",
                 Arrays.equals(parsedInts, new int[]{1, 2, 3})
         );
 
@@ -102,7 +108,8 @@ public class MyProcedures {
                 .collect(Collectors.toList());
 
         MyProcedures.printTestResult(
-                "Using an instance method reference, convert ints to Strings",
+                "Instance Method Reference",
+                "convert ints to Strings",
                 intStrings.equals(List.of("1", "2", "3"))
         );
 
@@ -123,8 +130,8 @@ public class MyProcedures {
         }
 
         MyProcedures.printTestResult(
-                "Using a bound method reference, "
-                        +"count the number of instances in a list",
+                "Bound Method Reference",
+                "count the number of instances in a list",
                 2 == new MyInt(0).countInstances(
                         Stream.of(0, 1, 0, 2).map(MyInt::new)
                                 .collect(Collectors.toList())
@@ -152,10 +159,25 @@ public class MyProcedures {
         );
 
         MyProcedures.printTestResult(
-                "Using Comparator composing, sort a list of coordinates"
-                        +" by y-value, then by lower x-value.",
+                "Comparator Composing",
+                "sort a list of coordinates by y-value"
+                        +", then by lower x-value",
                 Arrays.deepEquals(coordinates,
                         new int[][]{{0, 1}, {0, 0}, {1, 0}})
+        );
+    }
+
+    public static void tryComposingPredicate(){
+        int[] posMultiplesOf3LessThan10 = IntStream.rangeClosed(-10, 10).filter(
+                ((IntPredicate) x -> x > 0)
+                        .and(x -> (x % 3) == 0)
+                        .and(x -> x < 10)
+        ).toArray();
+
+        MyProcedures.printTestResult(
+                "Predicate Composing",
+                "filter for positive ints",
+                Arrays.equals(posMultiplesOf3LessThan10, new int[]{3, 6, 9})
         );
     }
 }

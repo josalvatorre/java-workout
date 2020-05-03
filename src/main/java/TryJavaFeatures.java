@@ -19,6 +19,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryComposingFunction();
         TryJavaFeatures.tryDistinct();
         TryJavaFeatures.tryTakeWhile();
+        TryJavaFeatures.tryDropWhile();
     }
 
     public static void printTestResult(
@@ -220,8 +221,21 @@ public class TryJavaFeatures {
 
         TryJavaFeatures.printTestResult(
                 "Stream::takeWhile",
-                "Efficiently filter for negative ints in a sorted array.",
+                "Efficiently filter for negative ints in an ascending array",
                 Arrays.equals(negInts, new int[]{-3, -2, -1})
+        );
+    }
+
+    public static void tryDropWhile(){
+        int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
+
+        int[] posInts = Arrays.stream(sortedInts).dropWhile(x -> x <= 0)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::dropWhile",
+                "Efficiently filter for positive ints in a descending array",
+                Arrays.equals(posInts, new int[]{1, 2, 3})
         );
     }
 }

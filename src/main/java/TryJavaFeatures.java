@@ -17,6 +17,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryComposingComparator();
         TryJavaFeatures.tryComposingPredicate();
         TryJavaFeatures.tryComposingFunction();
+        TryJavaFeatures.tryDistinct();
     }
 
     public static void printTestResult(
@@ -194,6 +195,19 @@ public class TryJavaFeatures {
                 "map a list of Strings to the negative square of their lengths",
                 Arrays.equals(nameLengthSquaredNeg,
                         new int[]{-16, -25, -49, -25})
+        );
+    }
+
+    public static void tryDistinct(){
+        List<String> uniqueNames = Stream.of("Jose", "jose", "Tran", "tran")
+                .map(String::toLowerCase)
+                .distinct()
+                .collect(Collectors.toList());
+
+        TryJavaFeatures.printTestResult(
+                "Stream::distinct",
+                "get the unique strings in a stream",
+                uniqueNames.equals(List.of("jose", "tran"))
         );
     }
 }

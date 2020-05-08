@@ -23,6 +23,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryLimit();
         TryJavaFeatures.trySkip();
         TryJavaFeatures.tryMap();
+        TryJavaFeatures.tryFlatMap();
     }
 
     public static void printTestResult(
@@ -276,6 +277,21 @@ public class TryJavaFeatures {
                 "Stream::map",
                 "Map an array of strings to an array of their lengths",
                 Arrays.equals(lengths, new int[]{1, 2, 3})
+        );
+    }
+
+    public static void tryFlatMap(){
+        // Because of Java's hesitation to add a primitive-specific method
+        // for every possible type (in this case, flatMapToChar),
+        // it's better to just use int[]
+        int[] characters = Stream.of("a", "bc", "def")
+                .flatMapToInt(String::chars)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::flatMap",
+                "Map a stream of Strings to all of their characters",
+                Arrays.equals(characters, "abcdef".chars().toArray())
         );
     }
 }

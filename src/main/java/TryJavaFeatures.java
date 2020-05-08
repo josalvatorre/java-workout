@@ -22,6 +22,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryDropWhile();
         TryJavaFeatures.tryLimit();
         TryJavaFeatures.trySkip();
+        TryJavaFeatures.tryMap();
     }
 
     public static void printTestResult(
@@ -264,6 +265,17 @@ public class TryJavaFeatures {
                 "Stream::skip",
                 "Get the last multiples of two in a huge stream",
                 Arrays.equals(lastPosMultiplesOf2, new int[]{996, 998, 1000})
+        );
+    }
+
+    public static void tryMap(){
+        int[] lengths = Stream.of("x", "xx", "xxx").mapToInt(String::length)
+                .toArray();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::map",
+                "Map an array of strings to an array of their lengths",
+                Arrays.equals(lengths, new int[]{1, 2, 3})
         );
     }
 }

@@ -24,6 +24,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.trySkip();
         TryJavaFeatures.tryMap();
         TryJavaFeatures.tryFlatMap();
+        TryJavaFeatures.tryMatch();
     }
 
     public static void printTestResult(
@@ -292,6 +293,23 @@ public class TryJavaFeatures {
                 "Stream::flatMap",
                 "Map a stream of Strings to all of their characters",
                 Arrays.equals(characters, "abcdef".chars().toArray())
+        );
+    }
+
+    public static void tryMatch(){
+        final int LONG_LEN = 3;
+        String[] strs = new String[]{"123", "1", "1234567"};
+        Predicate<String> isLong = s -> s.length() > LONG_LEN;
+
+        boolean anyLongs = Arrays.stream(strs).anyMatch(isLong);
+        boolean allLongs = Arrays.stream(strs).allMatch(isLong);
+        boolean noLongs = Arrays.stream(strs).noneMatch(isLong);
+
+        TryJavaFeatures.printTestResult(
+                "Stream::*Match",
+                "check if string array has any/all/no strings"
+                        +"with length greater than 5",
+                anyLongs && !allLongs && !noLongs
         );
     }
 }

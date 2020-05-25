@@ -23,6 +23,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryFlatMap();
         TryJavaFeatures.tryMatch();
         TryJavaFeatures.tryFind();
+        TryJavaFeatures.tryReduce();
     }
 
     public static void printTestResult(
@@ -316,7 +317,8 @@ public class TryJavaFeatures {
     }
 
     public static void tryFind(){
-        final Supplier<IntStream> posInts = () -> IntStream.rangeClosed(1, 10);
+        final Supplier<IntStream> posInts = () -> IntStream
+                .rangeClosed(1, Integer.MAX_VALUE);
 
         final OptionalInt firstEvenPosInt = posInts.get()
                 .filter(x -> (x & 1) == 0)
@@ -327,6 +329,21 @@ public class TryJavaFeatures {
                 "find the first even positive integer",
                 firstEvenPosInt.isPresent()
                         && firstEvenPosInt.getAsInt() == 2
+        );
+    }
+
+    public static void tryReduce(){
+        final IntUnaryOperator sumOfFirstNWholeNums = n -> n*(n+1)/2;
+
+        final int sumOfFirst10WholeNums = IntStream
+                .rangeClosed(1, 10)
+                .reduce(0, Integer::sum);
+
+        TryJavaFeatures.printTestResult(
+                "Stream::reduce",
+                "find the sum of the first 10 whole numbers",
+                sumOfFirst10WholeNums ==
+                        sumOfFirstNWholeNums.applyAsInt(10)
         );
     }
 }

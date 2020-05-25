@@ -335,8 +335,7 @@ public class TryJavaFeatures {
     public static void tryReduce(){
         final IntUnaryOperator sumOfFirstNWholeNums = n -> n*(n+1)/2;
 
-        final int sumOfFirst10WholeNums = IntStream
-                .rangeClosed(1, 10)
+        final int sumOfFirst10WholeNums = IntStream.rangeClosed(1, 10)
                 .reduce(0, Integer::sum);
 
         TryJavaFeatures.printTestResult(
@@ -344,6 +343,26 @@ public class TryJavaFeatures {
                 "find the sum of the first 10 whole numbers",
                 sumOfFirst10WholeNums ==
                         sumOfFirstNWholeNums.applyAsInt(10)
+        );
+
+        final OptionalInt max = IntStream.rangeClosed(1, 10)
+                .reduce(Integer::max);
+
+        TryJavaFeatures.printTestResult(
+                "Stream::reduce",
+                "find the maximum of the first 10 whole numbers",
+                max.isPresent() && max.getAsInt() == 10
+        );
+
+        final OptionalInt maxFromParallel = IntStream.rangeClosed(1, 10)
+                .parallel()
+                .reduce(Integer::max);
+
+        TryJavaFeatures.printTestResult(
+                "Stream::reduce, Stream::parallel",
+                "find the maximum of a stream in parallel",
+                maxFromParallel.isPresent()
+                        && maxFromParallel.getAsInt() == 10
         );
     }
 }

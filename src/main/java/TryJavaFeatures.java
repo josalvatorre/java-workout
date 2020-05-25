@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -25,6 +22,7 @@ public class TryJavaFeatures {
         TryJavaFeatures.tryMap();
         TryJavaFeatures.tryFlatMap();
         TryJavaFeatures.tryMatch();
+        TryJavaFeatures.tryFind();
     }
 
     public static void printTestResult(
@@ -41,7 +39,7 @@ public class TryJavaFeatures {
     public static void tryPredicate(){
         // Apparently IntPredicate is necessary for working with IntStream
         // because of differences between int and Integer.
-        IntPredicate isOdd = x -> (x & 1) == 1;
+        final IntPredicate isOdd = x -> (x & 1) == 1;
         int[] oddInts = IntStream.rangeClosed(1, 10).filter(isOdd).toArray();
 
         TryJavaFeatures.printTestResult(
@@ -52,13 +50,13 @@ public class TryJavaFeatures {
     }
 
     public static void tryConsumer(){
-        Map<String, Boolean> housemates = new ConcurrentHashMap<>(Map.of(
+        final Map<String, Boolean> housemates = new ConcurrentHashMap<>(Map.of(
                 "Jose", false, "Tran", false,
                 "Ahmed", false, "Ashish", false
         ));
 
         // A consumer which sets all entries in the hash-map to true.
-        Consumer<Map.Entry<String, Boolean>> setToTrue =
+        final Consumer<Map.Entry<String, Boolean>> setToTrue =
                 entry -> housemates.put(entry.getKey(), true);
 
         housemates.entrySet().parallelStream().forEach(setToTrue);
@@ -72,10 +70,10 @@ public class TryJavaFeatures {
 
     public static void tryFunction(){
         // We could've directly passed this Function, but let's note the type.
-        Function<Integer, String> myIntToString = Object::toString;
+        final Function<Integer, String> myIntToString = Object::toString;
 
         // A List of ints parsed into strings.
-        List<String> parsedInts = Stream.of(1, 2, 3)
+        final List<String> parsedInts = Stream.of(1, 2, 3)
                 .map(myIntToString)
                 .collect(Collectors.toList());
 
@@ -87,10 +85,11 @@ public class TryJavaFeatures {
 
         // Primitive Specialization is necessary to avoid type casting.
         // We could've directly passed this Function, but let's note the type.
-        ToIntFunction<String> toLen = String::length;
+        final ToIntFunction<String> toLen = String::length;
 
         // An array of the lengths of the housemates' names.
-        int[] housemateLengths = Stream.of("Jose", "Tran", "Ahmed", "Ashish")
+        final int[] housemateLengths = Stream
+                .of("Jose", "Tran", "Ahmed", "Ashish")
                 .mapToInt(toLen)
                 .toArray();
 
@@ -102,7 +101,7 @@ public class TryJavaFeatures {
     }
 
     public static void tryMethodReference(){
-        int[] parsedInts = Stream.of("1", "2", "3")
+        final int[] parsedInts = Stream.of("1", "2", "3")
                 .mapToInt(Integer::parseInt)
                 .toArray();
 
@@ -112,7 +111,7 @@ public class TryJavaFeatures {
                 Arrays.equals(parsedInts, new int[]{1, 2, 3})
         );
 
-        List<String> intStrings = IntStream.of(1, 2, 3)
+        final List<String> intStrings = IntStream.of(1, 2, 3)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
 
@@ -149,7 +148,7 @@ public class TryJavaFeatures {
     }
 
     public static void tryComposingComparator(){
-        int[][] coordinates = new int[][]{
+        final int[][] coordinates = new int[][]{
                 {0, 0}, {1, 0}, {0, 1}
         };
 
@@ -177,11 +176,12 @@ public class TryJavaFeatures {
     }
 
     public static void tryComposingPredicate(){
-        int[] posMultiplesOf3LessThan10 = IntStream.rangeClosed(-10, 10).filter(
-                ((IntPredicate) x -> x > 0)
+        final int[] posMultiplesOf3LessThan10 = IntStream.rangeClosed(-10, 10)
+                .filter(
+                        ((IntPredicate) x -> x > 0)
                         .and(x -> (x % 3) == 0)
                         .and(x -> x < 10)
-        ).toArray();
+                ).toArray();
 
         TryJavaFeatures.printTestResult(
                 "Predicate Composing",
@@ -191,7 +191,7 @@ public class TryJavaFeatures {
     }
 
     public static void tryComposingFunction(){
-        int[] nameLengthSquaredNeg = Stream.of(
+        final int[] nameLengthSquaredNeg = Stream.of(
                 "Jose", "Haris", "Esteban", "Sajad"
         ).mapToInt(String::length).map(
                 ((IntUnaryOperator) x -> x*x).andThen(x -> -x)
@@ -206,7 +206,8 @@ public class TryJavaFeatures {
     }
 
     public static void tryDistinct(){
-        List<String> uniqueNames = Stream.of("Jose", "jose", "Tran", "tran")
+        final List<String> uniqueNames = Stream
+                .of("Jose", "jose", "Tran", "tran")
                 .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
@@ -219,9 +220,9 @@ public class TryJavaFeatures {
     }
 
     public static void tryTakeWhile(){
-        int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
+        final int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
 
-        int[] negInts = Arrays.stream(sortedInts).takeWhile(x -> x < 0)
+        final int[] negInts = Arrays.stream(sortedInts).takeWhile(x -> x < 0)
                 .toArray();
 
         TryJavaFeatures.printTestResult(
@@ -232,9 +233,9 @@ public class TryJavaFeatures {
     }
 
     public static void tryDropWhile(){
-        int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
+        final int[] sortedInts = IntStream.rangeClosed(-3, 3).toArray();
 
-        int[] posInts = Arrays.stream(sortedInts).dropWhile(x -> x <= 0)
+        final int[] posInts = Arrays.stream(sortedInts).dropWhile(x -> x <= 0)
                 .toArray();
 
         TryJavaFeatures.printTestResult(
@@ -245,7 +246,7 @@ public class TryJavaFeatures {
     }
 
     public static void tryLimit(){
-        int[] firstPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
+        final int[] firstPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
                 .filter(x -> (x % 2) == 0)
                 .limit(3)
                 .toArray();
@@ -258,7 +259,7 @@ public class TryJavaFeatures {
     }
 
     public static void trySkip(){
-        int[] lastPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
+        final int[] lastPosMultiplesOf2 = IntStream.rangeClosed(1, 1000)
                 .filter((int x) -> (x & 1) == 0)
                 .skip(1000/2 - 3)
                 .toArray();
@@ -271,7 +272,8 @@ public class TryJavaFeatures {
     }
 
     public static void tryMap(){
-        int[] lengths = Stream.of("x", "xx", "xxx").mapToInt(String::length)
+        final int[] lengths = Stream.of("x", "xx", "xxx")
+                .mapToInt(String::length)
                 .toArray();
 
         TryJavaFeatures.printTestResult(
@@ -285,7 +287,7 @@ public class TryJavaFeatures {
         // Because of Java's hesitation to add a primitive-specific method
         // for every possible type (in this case, flatMapToChar),
         // it's better to just use int[]
-        int[] characters = Stream.of("a", "bc", "def")
+        final int[] characters = Stream.of("a", "bc", "def")
                 .flatMapToInt(String::chars)
                 .toArray();
 
@@ -298,8 +300,8 @@ public class TryJavaFeatures {
 
     public static void tryMatch(){
         final int LONG_LEN = 3;
-        String[] strs = new String[]{"123", "1", "1234567"};
-        Predicate<String> isLong = s -> s.length() > LONG_LEN;
+        final String[] strs = new String[]{"123", "1", "1234567"};
+        final Predicate<String> isLong = s -> s.length() > LONG_LEN;
 
         boolean anyLongs = Arrays.stream(strs).anyMatch(isLong);
         boolean allLongs = Arrays.stream(strs).allMatch(isLong);
@@ -310,6 +312,21 @@ public class TryJavaFeatures {
                 "check if string array has any/all/no strings"
                         +"with length greater than 5",
                 anyLongs && !allLongs && !noLongs
+        );
+    }
+
+    public static void tryFind(){
+        final Supplier<IntStream> posInts = () -> IntStream.rangeClosed(1, 10);
+
+        final OptionalInt firstEvenPosInt = posInts.get()
+                .filter(x -> (x & 1) == 0)
+                .findFirst();
+
+        TryJavaFeatures.printTestResult(
+                "Stream::find*",
+                "find the first even positive integer",
+                firstEvenPosInt.isPresent()
+                        && firstEvenPosInt.getAsInt() == 2
         );
     }
 }
